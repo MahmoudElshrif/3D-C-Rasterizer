@@ -96,9 +96,9 @@ int main()
 		delta = (clock.restart().asSeconds() - lasttime);
 		x += delta;
 		buffer = {};
-		sf::Vector2f mp = sf::Vector2f(sf::Mouse::getPosition());
-		cubes[0].setRotation((mp.x - 300) / 360 * 3.1419, (mp.y - 300) / 360 * 3.1419, 1000);
-		cubes[0].setPosition(mp.x - 600, mp.y - 600, 1000);
+		sf::Vector2f mp = sf::Vector2f(sf::Mouse::getPosition(window));
+		//cubes[0].setRotation(10,23,123);
+		cubes[0].setPosition(mp.x - 300,mp.y - 300,600);
 		cubes[0].Draw(window,buffer,cam);
 
 		//for (int i = 0; i < cubes.size(); i++) {
