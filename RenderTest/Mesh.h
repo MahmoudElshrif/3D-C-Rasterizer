@@ -19,7 +19,7 @@ public:
 	void setRotation(float x, float y, float z);
 	void setScale(float x, float y, float z);
 	void setScale(float x);
-	void Draw(sf::RenderWindow& window, vector<sf::ConvexShape>& buffer,Camera cam);
+	void Draw(sf::RenderWindow& window, std::vector<triData>& buffer,Camera cam);
 
 };
 
