@@ -7,6 +7,14 @@
 #include "Convert.h"
 #include "Camera.h"
 
+struct triData{
+	sf::ConvexShape shape;
+	float depth;
+	bool operator < (const triData &dat) {
+		return depth > dat.depth;
+	}
+};
+
 class Triangle
 {
 public:
@@ -22,6 +30,6 @@ public:
 	void setPosition(Vector3f pos);
 	void Draw(sf::RenderWindow& window);
 	float getNormal();
-	void ApplyTransform(sf::RenderWindow& window, std::vector<sf::ConvexShape>& buffer,Camera cam);
+	void ApplyTransform(sf::RenderWindow& window, std::vector<triData>& buffer,Camera cam);
 };
 

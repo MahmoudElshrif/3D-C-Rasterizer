@@ -29,7 +29,7 @@ int main()
 	sf::Event ev;
 	sf::Clock clock;
 	sf::Font font;
-	vector<sf::ConvexShape> buffer;
+	std::vector<triData> buffer;
 	font.loadFromFile("arial.ttf");
 	//if(!font.loadFromFile("arial.ttf"))
 	float lasttime = 0;
@@ -66,8 +66,8 @@ int main()
 		Mesh cube;
 		//cube.faces = tris;
 		//cube.setPosition(rand() % 560 - 280, rand() % 650 + 25, rand() % 650 + 25);
-		cube.setPosition((rand() % (size[0] - 50)) - size[0] / 2 + 30, (rand() % (size[1] - 50)) - size[1] / 2 + 30,800);
-		cube.setScale(rand() % 30 + 100);
+		cube.setPosition((rand() % (size[0] * 2)) - size[0], (rand() % (size[1] * 2)) - size[1], (rand() % (1500)) + 300);
+		cube.setScale(rand() % 30 + 50);
 		cubes.push_back(cube);
 	}
 
@@ -94,26 +94,29 @@ int main()
 			}
 		}
 		delta = (clock.restart().asSeconds() - lasttime);
-		x += delta;
+		//x += delta;
 		buffer = {};
 		sf::Vector2f mp = sf::Vector2f(sf::Mouse::getPosition(window));
-		//cubes[0].setRotation(10,23,123);
-		cubes[0].setPosition(mp.x - 300,mp.y - 300,600);
-		cubes[0].Draw(window,buffer,cam);
 
-		//for (int i = 0; i < cubes.size(); i++) {
-		//	//cubes[i].setRotation(x * 2 + cubes[i].pos.x * cubes[i].pos.y , (x + cubes[i].pos.x * cubes[i].pos.y) / 2.4, (x + cubes[i].pos.x * cubes[i].pos.y) * 1.4);
-		//	//cubes[i].setPosition(cubes[i].pos.x,cubes[i].pos.y,x * 10);
-		//	cubes[i].Draw(window,buffer,cam);
-		//}
+
+
+		for (int i = 0; i < cubes.size(); i++) {
+			cubes[i].setRotation(x * 2 + cubes[i].pos.x * cubes[i].pos.y , (x + cubes[i].pos.x * cubes[i].pos.y) / 2.4, (x + cubes[i].pos.x * cubes[i].pos.y) * 1.4);
+			//cubes[i].setPosition(cubes[i].pos.x,cubes[i].pos.y,x * 10);
+			cubes[i].Draw(window,buffer,cam);
+		}
+		sort(buffer.begin(), buffer.end());
+
+
+		cubes.back().setPosition(0, 0, mp.y * 10);
 		for (auto i : buffer){
 			for (int x = 0; x < 3;x++) {
-				auto point = i.getPoint(x);
-				i.setPoint(x,sf::Vector2f(point.x * size[0] * 2 + size[0] / 2,point.y * size[1] * 2 + size[1]/2));
+				auto point = i.shape.getPoint(x);
+				i.shape.setPoint(x,sf::Vector2f(point.x * size[0] * 2 + size[0] / 2,point.y * size[1] * 2 + size[1]/2));
 				//cout << i.getPoint(x).x << " " << i.getPoint(x).y << endl;
 			}
 			//cout << endl;
-			window.draw(i);
+			window.draw(i.shape);
 		}
 		fps = 1.f / delta;
 		text.setString(to_string((int)fps));

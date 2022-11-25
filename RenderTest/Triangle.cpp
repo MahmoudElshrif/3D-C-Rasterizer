@@ -1,6 +1,8 @@
 #include "Triangle.h"
 
 
+
+
 Triangle::Triangle() {
 	vertices.push_back(Vertex(-1, 1, 0));
 	vertices.push_back(Vertex(1, 1, 0));
@@ -35,7 +37,7 @@ void Triangle::setPosition(float x, float y, float z) {
 	}
 }
 
-void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<sf::ConvexShape>& buffer,Camera cam) {
+void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<triData>& buffer,Camera cam) {
 	sf::ConvexShape vertx(vertices.size());
 	Vector3f av;
 	av.setZero();
@@ -55,5 +57,9 @@ void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<sf::ConvexSh
 		return;
 	dot *= 255;
 	vertx.setFillColor(sf::Color(dot, dot, dot,255));
-	buffer.push_back(vertx);
+	triData data = {
+		vertx,
+		av.z()
+	};
+	buffer.push_back(data);
 }
