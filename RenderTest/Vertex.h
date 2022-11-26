@@ -4,6 +4,59 @@
 
 using namespace Eigen;
 
+struct RotationMatrix {
+	static Eigen::Matrix4f ZRotation4(float z) {
+		return Matrix4f{
+			{cosf(z),-sinf(z) ,0,0},
+			{sinf(z),cos(z),0,0},
+			{0,0,1,0},
+			{0,0,0,1}
+
+		};
+	}
+
+	static Eigen::Matrix4f YRotation4(float y) {
+		return Matrix4f{
+			{cosf(y), 0, sinf(y),0},
+			{ 0,1,0,0},
+			{ -sinf(y),0,cos(y),0},
+			{0,0,0,1}
+		};
+	}
+	static Eigen::Matrix4f XRotation4(float x) {
+		return Matrix4f{
+				{1,	0, 0, 0},
+				{0,	cosf(x),-sinf(x),0},
+				{0,sinf(x),cos(x),0},
+				{0,0,0,1}
+		};
+	}
+	static Eigen::Matrix3f ZRotation(float z) {
+		return Matrix3f{
+			{cosf(z),-sinf(z) ,0},
+			{sinf(z),cos(z),0},
+			{0,0,1},
+
+		};
+	}
+
+	static Eigen::Matrix3f YRotation(float y) {
+		return Matrix3f{
+			{cosf(y), 0, sinf(y)},
+			{ 0,1,0},
+			{ -sinf(y),0,cos(y)},
+		};
+	}
+
+	static Eigen::Matrix3f XRotation(float x) {
+		return Matrix3f{
+				{1,	0, 0},
+				{0,	cosf(x),-sinf(x)},
+				{0,sinf(x),cos(x)},
+		};
+	}
+};
+
 class Vertex
 {
 public:

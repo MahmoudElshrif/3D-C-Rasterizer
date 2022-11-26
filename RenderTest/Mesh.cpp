@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "Camera.h"
 
 
 Mesh::Mesh() {
@@ -59,7 +60,7 @@ void Mesh::setRotation(float x, float y, float z) {
 	}
 }
 
-void Mesh::Draw(sf::RenderWindow& window, std::vector<triData>& buffer,Camera cam) {
+void Mesh::Draw(sf::RenderWindow& window, std::vector<triData>& buffer, Camera* cam) {
 	for (int i = 0; i < faces.size(); i++) {
 		faces[i].ApplyTransform(window,buffer,cam);
 	}
