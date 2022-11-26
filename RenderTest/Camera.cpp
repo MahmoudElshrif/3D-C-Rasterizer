@@ -1,20 +1,41 @@
 #include "Camera.h"
-
+#include <iostream>
 
 Camera::Camera(float fov,float near,float far) {
 	this->fov = fov / 2;
 	this->near = near;
 	this->far = far;
-	this->pos.setZero();
-	this->rotation.setZero();
-	this->scale.setOnes();
+	this->pos = sf::Vector3f(0.f, 0.f, 0.f);
+	this->rot = sf::Vector3f(0.f, 0.f, 0.f);
+	this->scale = sf::Vector3f(1.f,1.f,1.f);
 	
 }
 
 Eigen::Vector2f Camera::getProjectedPoint(Eigen::Vector3f pos) {
-	Eigen::Vector2f projected(0.f,0.f);
-	projected.x() = (near * pos.x()) / pos.z();
-	projected.y() = (near * pos.y()) / pos.z();
+	Eigen::Vector2f projected(0.f, 0.f);
+	Eigen::Vector3f transform(pos.x(), pos.y(), pos.z());
+	transform -= S2E(this->pos);
+	Eigen::Matrix3f rotz {
+		{cosf(-rot.z),sin(-rot.z),0},
+		{-sin(-rot.z),cos(-rot.z),0 },
+		{ 0,0,1 }
+	};
+	Eigen::Matrix3f roty {
+		{cosf(-rot.y),0,sin(-rot.y)},
+		{0,1,0},
+		{-sin(-rot.y), 0 ,cos(-rot.y)}
+	};
+	Eigen::Matrix3f rotx{
+		{1,0,0},
+		{0,cos(-rot.x),sin(-rot.x)},
+		{0,-sin(-rot.x),cos(-rot.x)}
+	};
+	transform = ((rotz * roty) * rotx) * transform;
+	//std::cout << transform << std::endl;
+	projected.x() = (near * transform.x()) / transform.z();
+	projected.y() = (near * transform.y()) / transform.z();
 	projected /= near * tanf(this->fov);
+	if (transform.z() <= near || transform.z() >= far)
+		return Eigen::Vector2f(5,5);
 	return projected;
 }
