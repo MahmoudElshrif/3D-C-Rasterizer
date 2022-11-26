@@ -24,9 +24,8 @@ int main()
 {
 	int size[2] = {600,600};
 	sf::RenderWindow window(sf::VideoMode(size[0],size[1]), "hello world", sf::Style::Titlebar | sf::Style::Close);
-	window.setVerticalSyncEnabled(true);
 	window.setMouseCursorVisible(false);
-	Camera cam(90,0.1,100000);
+	Camera cam(90,0.1,10000,size);
 	sf::Event ev;
 	sf::Clock clock;
 	sf::Font font;
@@ -35,7 +34,8 @@ int main()
 	//if(!font.loadFromFile("arial.ttf"))
 	float lasttime = 0;
 	vector<Mesh> cubes;
-
+	cam.meshes = &cubes;
+	/*
 	vector<Vertex> vertices;
 	vector<Triangle> tris;
 
@@ -62,12 +62,12 @@ int main()
 		}
 
 	}
-
-	for (int i = 0; i < 10; i++) {
+	*/
+	for (int i = 0; i < 100; i++) {
 		Mesh cube;
-		cube.faces = tris;
+		//cube.faces = tris;
 		//cube.setPosition(rand() % 560 - 280, rand() % 650 + 25, rand() % 650 + 25);
-		cube.setPosition((rand() % (size[0] * 2)) - size[0], (rand() % (size[1] * 2)) - size[1], (rand() % (600 )) + 300);
+		cube.setPosition((rand() % (size[0] * 4)) - size[0] * 2, (rand() % (size[1] * 4)) - size[1] * 2, (rand() % (600 * 4)) - 300 * 4);
 		cube.setScale(rand() % 30 + 50);
 		cubes.push_back(cube);
 	}
@@ -95,8 +95,7 @@ int main()
 			}
 		}
 		delta = (clock.restart().asSeconds() - lasttime);
-		//x += delta;
-		buffer = {};
+
 		sf::Vector2f mp = sf::Vector2f(sf::Mouse::getPosition(window));
 		cam.rot.y += (mp.x - size[0] / 2) / 600;
 		cam.rot.x -= (mp.y - size[1] / 2) / 600;
@@ -145,24 +144,8 @@ int main()
 		}
 
 
-		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i].setRotation(x * 2 + cubes[i].pos.x * cubes[i].pos.y , (x + cubes[i].pos.x * cubes[i].pos.y) / 2.4, (x + cubes[i].pos.x * cubes[i].pos.y) * 1.4);
-			//cubes[i].setPosition(cubes[i].pos.x,cubes[i].pos.y,x * 10);
-			cubes[i].Draw(window,buffer,cam);
-		}
-		sort(buffer.begin(), buffer.end());
+		cam.Render(window);
 
-
-		//cubes.back().setPosition(0, 0, mp.y * 10);
-		for (auto i : buffer){
-			for (int x = 0; x < 3;x++) {
-				auto point = i.shape.getPoint(x);
-				i.shape.setPoint(x,sf::Vector2f(point.x * size[0] * 2 + size[0] / 2,point.y * size[1] * 2 + size[1]/2));
-				//cout << i.getPoint(x).x << " " << i.getPoint(x).y << endl;
-			}
-			//cout << endl;
-			window.draw(i.shape);
-		}
 		fps = 1.f / delta;
 		text.setString(to_string((int)fps));
 

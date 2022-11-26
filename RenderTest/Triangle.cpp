@@ -1,5 +1,6 @@
+#pragma once
 #include "Triangle.h"
-
+#include "Camera.h"
 
 
 
@@ -37,7 +38,7 @@ void Triangle::setPosition(float x, float y, float z) {
 	}
 }
 
-void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<triData>& buffer,Camera cam) {
+void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<triData>& buffer, Camera* cam) {
 	sf::ConvexShape vertx(vertices.size());
 	Vector3f av;
 	av.setZero();
@@ -48,7 +49,7 @@ void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<triData>& bu
 		Vector3f pos = Vector3f(p.x(), p.y(), p.z());
 		av += pos;
 		poses.push_back(pos);
-		Eigen::Vector3f proj = cam.getProjectedPoint(pos);
+		Eigen::Vector3f proj = cam->getProjectedPoint(pos);
 		if (proj.x() >= 1.5 || proj.x() <= -1.5 || proj.y() >= 1.5 || proj.y() <= -1.5)
 			return;
 		avz += proj.z() / 3;
@@ -57,7 +58,7 @@ void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<triData>& bu
 	av /= 3;
 	Eigen::Vector3f cross = (poses[0] - poses[1]).cross(poses[0] - poses[2]);
 	cross = cross.normalized();
-	float dot = cross.dot((S2E(cam.pos) - av).normalized());
+	float dot = cross.dot((S2E(cam->pos) - av).normalized());
 	if (dot <= 0)
 		return;
 	dot *= 255;

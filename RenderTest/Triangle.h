@@ -5,7 +5,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Convert.h"
-#include "Camera.h"
+
+class Camera;
 
 struct triData{
 	sf::ConvexShape shape;
@@ -30,6 +31,6 @@ public:
 	void setPosition(Vector3f pos);
 	void Draw(sf::RenderWindow& window);
 	float getNormal();
-	void ApplyTransform(sf::RenderWindow& window, std::vector<triData>& buffer,Camera cam);
+	void ApplyTransform(sf::RenderWindow& window, std::vector<triData>& buffer, Camera* cam);
 };
 
