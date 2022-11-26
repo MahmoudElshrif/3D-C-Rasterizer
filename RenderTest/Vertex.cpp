@@ -29,10 +29,11 @@ Vector4f Vertex::Transform() {
 void Vertex::setRotation(float x, float y, float z) {
 	rotation = Matrix4f::Identity();
 	rotation *= Matrix4f{
-		{1,	0, 0, 0},
-		{0,	cosf(x),-sinf(x),0},
-		{0,sinf(x),cos(x),0},
+		{cosf(z),-sinf(z) ,0,0},
+		{sinf(z),cos(z),0,0},
+		{0,0,1,0},
 		{0,0,0,1}
+
 	};
 	rotation *= Matrix4f{
 		{cosf(y), 0, sinf(y),0},
@@ -41,11 +42,10 @@ void Vertex::setRotation(float x, float y, float z) {
 		{0,0,0,1}
 	};
 	rotation *= Matrix4f{
-		{cosf(z),-sinf(z) ,0,0},
-		{sinf(z),cos(z),0,0},
-		{0,0,1,0},
+		{1,	0, 0, 0},
+		{0,	cosf(x),-sinf(x),0},
+		{0,sinf(x),cos(x),0},
 		{0,0,0,1}
-
 	};
 }
 

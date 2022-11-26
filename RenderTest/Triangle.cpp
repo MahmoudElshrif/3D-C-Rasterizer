@@ -47,12 +47,15 @@ void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<triData>& bu
 		Vector3f pos = Vector3f(p.x(), p.y(), p.z());
 		av += pos;
 		poses.push_back(pos);
-		vertx.setPoint(i,Eigen2SFML(cam.getProjectedPoint(pos)));
+		Eigen::Vector2f proj = cam.getProjectedPoint(pos);
+		if (proj.x() >= 1.5 || proj.x() <= -1.5 || proj.y() >= 1.5 || proj.y() <= -1.5)
+			return;
+		vertx.setPoint(i,E2S(proj));
 	}
 	av /= 3;
 	Eigen::Vector3f cross = (poses[0] - poses[1]).cross(poses[0] - poses[2]);
 	cross = cross.normalized();
-	float dot = cross.dot((cam.pos - av).normalized());
+	float dot = cross.dot((S2E(cam.pos) - av).normalized());
 	if (dot <= 0)
 		return;
 	dot *= 255;

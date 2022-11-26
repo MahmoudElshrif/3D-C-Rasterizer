@@ -25,7 +25,7 @@ int main()
 	int size[2] = {600,600};
 	sf::RenderWindow window(sf::VideoMode(size[0],size[1]), "hello world", sf::Style::Titlebar | sf::Style::Close);
 	window.setVerticalSyncEnabled(true);
-	Camera cam(90,0.1,1000);
+	Camera cam(90,0.1,100000);
 	sf::Event ev;
 	sf::Clock clock;
 	sf::Font font;
@@ -98,6 +98,28 @@ int main()
 		buffer = {};
 		sf::Vector2f mp = sf::Vector2f(sf::Mouse::getPosition(window));
 
+		//cam.rot.x = 3.141 / 4;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+			//cam.pos.x += 1000 * delta;
+			cam.rot.y += 1 * delta;
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+			//cam.pos.x -= 1000 * delta;
+			cam.rot.y -= 1 * delta;
+
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			//cam.pos.z += 1000 * delta;
+			cam.rot.x += 1 * delta;
+
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			//cam.pos.z -= 1000 * delta;
+			cam.rot.x -= 1 * delta;
+
+		}
 
 
 		for (int i = 0; i < cubes.size(); i++) {
@@ -108,7 +130,7 @@ int main()
 		sort(buffer.begin(), buffer.end());
 
 
-		cubes.back().setPosition(0, 0, mp.y * 10);
+		//cubes.back().setPosition(0, 0, mp.y * 10);
 		for (auto i : buffer){
 			for (int x = 0; x < 3;x++) {
 				auto point = i.shape.getPoint(x);
