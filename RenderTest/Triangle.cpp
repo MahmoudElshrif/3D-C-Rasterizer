@@ -42,15 +42,17 @@ void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<triData>& bu
 	Vector3f av;
 	av.setZero();
 	std::vector<Vector3f> poses;
+	float avz = 0;
 	for (int i = 0; i < 3; i++) {
 		Vector4f p = vertices[i].Transform();
 		Vector3f pos = Vector3f(p.x(), p.y(), p.z());
 		av += pos;
 		poses.push_back(pos);
-		Eigen::Vector2f proj = cam.getProjectedPoint(pos);
+		Eigen::Vector3f proj = cam.getProjectedPoint(pos);
 		if (proj.x() >= 1.5 || proj.x() <= -1.5 || proj.y() >= 1.5 || proj.y() <= -1.5)
 			return;
-		vertx.setPoint(i,E2S(proj));
+		avz += proj.z() / 3;
+		vertx.setPoint(i,sf::Vector2f(proj.x(),proj.y()));
 	}
 	av /= 3;
 	Eigen::Vector3f cross = (poses[0] - poses[1]).cross(poses[0] - poses[2]);
@@ -62,7 +64,7 @@ void Triangle::ApplyTransform(sf::RenderWindow& window, std::vector<triData>& bu
 	vertx.setFillColor(sf::Color(dot, dot, dot,255));
 	triData data = {
 		vertx,
-		av.z()
+		avz
 	};
 	buffer.push_back(data);
 }

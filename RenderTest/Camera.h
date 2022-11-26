@@ -10,6 +10,6 @@ public:
 	sf::Vector3f pos, rot, scale;
 	float far, near, fov;
 	Camera(float fov, float near, float far);
-	Eigen::Vector2f getProjectedPoint(Eigen::Vector3f pos);
+	Eigen::Vector3f getProjectedPoint(Eigen::Vector3f pos);
 };
 

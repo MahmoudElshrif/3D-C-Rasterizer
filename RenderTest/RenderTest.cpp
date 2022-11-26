@@ -25,6 +25,7 @@ int main()
 	int size[2] = {600,600};
 	sf::RenderWindow window(sf::VideoMode(size[0],size[1]), "hello world", sf::Style::Titlebar | sf::Style::Close);
 	window.setVerticalSyncEnabled(true);
+	window.setMouseCursorVisible(false);
 	Camera cam(90,0.1,100000);
 	sf::Event ev;
 	sf::Clock clock;
@@ -35,7 +36,7 @@ int main()
 	float lasttime = 0;
 	vector<Mesh> cubes;
 
-	/*vector<Vertex> vertices;
+	vector<Vertex> vertices;
 	vector<Triangle> tris;
 
 	ifstream f("monkey.obj");
@@ -49,7 +50,7 @@ int main()
 		char junk;
 
 		if (c[0] == 'v') {
-			int x, y, z;
+			float x, y, z;
 			s >> junk >> x >> y >> z;
 			vertices.push_back(Vertex(x,y,z));
 		}
@@ -60,13 +61,13 @@ int main()
 			tris.push_back(Triangle({vertices[f[0] - 1],vertices[f[1] - 1] ,vertices[f[2] - 1] }));
 		}
 
-	}*/
+	}
 
-	for (int i = 0; i < 30; i++) {
+	for (int i = 0; i < 10; i++) {
 		Mesh cube;
-		//cube.faces = tris;
+		cube.faces = tris;
 		//cube.setPosition(rand() % 560 - 280, rand() % 650 + 25, rand() % 650 + 25);
-		cube.setPosition((rand() % (size[0] * 2)) - size[0], (rand() % (size[1] * 2)) - size[1], (rand() % (1500)) + 300);
+		cube.setPosition((rand() % (size[0] * 2)) - size[0], (rand() % (size[1] * 2)) - size[1], (rand() % (600 )) + 300);
 		cube.setScale(rand() % 30 + 50);
 		cubes.push_back(cube);
 	}
@@ -97,28 +98,50 @@ int main()
 		//x += delta;
 		buffer = {};
 		sf::Vector2f mp = sf::Vector2f(sf::Mouse::getPosition(window));
+		cam.rot.y += (mp.x - size[0] / 2) / 600;
+		cam.rot.x -= (mp.y - size[1] / 2) / 600;
+		cam.rot.x = max(-3.141f / 2, min(3.141f/2,cam.rot.x));
+		sf::Mouse::setPosition(sf::Vector2i(size[0] / 2, size[1] / 2), window);
+
 
 		//cam.rot.x = 3.141 / 4;
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
 			//cam.pos.x += 1000 * delta;
-			cam.rot.y += 1 * delta;
+			cam.pos.x += 1000 * delta * cosf(cam.rot.y);
+			cam.pos.z += 1000 * delta * -sinf(cam.rot.y);
+			//cam.pos.y += 1000 * delta * sinf(cam.rot.y);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 			//cam.pos.x -= 1000 * delta;
-			cam.rot.y -= 1 * delta;
+			//cam.rot.y -= 1 * delta;
+			cam.pos.x -= 1000 * delta * cosf(cam.rot.y);
+			cam.pos.z -= 1000 * delta * -sinf(cam.rot.y);
 
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			cam.pos.x += 1000 * delta * sinf(cam.rot.y);
+			cam.pos.y += 1000 * delta * -sinf(cam.rot.x);
+			cam.pos.z += 1000 * delta * cosf(cam.rot.y);
 			//cam.pos.z += 1000 * delta;
-			cam.rot.x += 1 * delta;
+			//cam.rot.x += 1 * delta;
 
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-			//cam.pos.z -= 1000 * delta;
-			cam.rot.x -= 1 * delta;
+			cam.pos.x -= 1000 * delta * sinf(cam.rot.y);
+			cam.pos.y -= 1000 * delta * -sinf(cam.rot.x);
+			cam.pos.z -= 1000 * delta * cosf(cam.rot.y);
+		}
 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+			cam.pos.y -= 1000 * delta;
+			//cam.pos.z += 1000 * delta;
+			//cam.rot.x += 1 * delta;
+
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+			cam.pos.y += 1000 * delta;
 		}
 
 
