@@ -28,16 +28,20 @@ void Camera::Render(sf::RenderWindow& window) {
 	sort(buffer.begin(), buffer.end());
 
 
+	std::vector<sf::Vertex> verts;
+
+	int num = 0;
 	//cubes.back().setPosition(0, 0, mp.y * 10);
 	for (auto i : buffer) {
 		for (int x = 0; x < 3; x++) {
 			auto point = i.shape.getPoint(x);
-			i.shape.setPoint(x, sf::Vector2f(point.x * winSize[0] * 2 + winSize[0] / 2, point.y * winSize[1] * 2 + winSize[1] / 2));
+			verts.push_back(sf::Vertex(sf::Vector2f(point.x * winSize[0] * 2 + winSize[0] / 2, point.y * winSize[1] * 2 + winSize[1] / 2), i.shape.getFillColor()));
+			//i.shape.setPoint(x, sf::Vector2f(point.x * winSize[0] * 2 + winSize[0] / 2, point.y * winSize[1] * 2 + winSize[1] / 2));
 			//cout << i.getPoint(x).x << " " << i.getPoint(x).y << endl;
 		}
 		//cout << endl;
-		window.draw(i.shape);
 	}
+	window.draw(&verts[0],verts.size(),sf::Triangles);
 }
 
 Eigen::Vector3f Camera::getProjectedPoint(Eigen::Vector3f pos) {
