@@ -9,9 +9,6 @@
 #include "Convert.h"
 #include "Vertex.h"
 #include "Mesh.h"
-#include <fstream>
-#include <string>
-#include <strstream>
 #include "Camera.h"
 
 using namespace std;
@@ -37,37 +34,11 @@ int main()
 	cam.meshes = &cubes;
 
 	bool paused = false;
-
-	vector<Vertex> vertices;
-	vector<Triangle> tris;
-
-	/*ifstream f("monkey.obj");
-
-	while (!f.eof()) {
-		char c[128];
-		f.getline(c, 128);
-
-		strstream s;
-		s << c;
-		char junk;
-
-		if (c[0] == 'v') {
-			float x, y, z;
-			s >> junk >> x >> y >> z;
-			vertices.push_back(Vertex(x,y,z));
-		}
-
-		if (c[0] == 'f') {
-			int f[3];
-			s >> junk >> f[0] >> f[1] >> f[2];
-			tris.push_back(Triangle({vertices[f[0] - 1],vertices[f[1] - 1] ,vertices[f[2] - 1] }));
-		}
-
-	}*/
 	
 	for (int i = 0; i < 30; i++) 
 		for (int j = 0; j < 30;j++){
 		Mesh cube;
+
 		//cube.faces = tris;
 		//cube.setPosition(rand() % 560 - 280, rand() % 650 + 25, rand() % 650 + 25);
 		//cube.setPosition(i, sinf((float)(i+j) / (30.f*30.f) * 6.28f * 20.f) * 1,j);
@@ -77,6 +48,15 @@ int main()
 		cube.setScale(1);
 		cubes.push_back(cube);
 	}
+
+	Mesh monkey("monkey.obj");
+
+	monkey.setPosition(-100, 0, 0);
+	monkey.setScale(30);
+	monkey.setRotation(3.141f, -3.141/2, 0);
+
+	cubes.push_back(monkey);
+
 
 	sf::Text text;
 	text.setFont(font);
@@ -106,6 +86,7 @@ int main()
 					}
 			}
 		}
+
 		delta = (clock.restart().asSeconds() - lasttime);
 		update += delta;
 

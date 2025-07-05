@@ -32,6 +32,37 @@ Mesh::Mesh() {
 	}
 }
 
+Mesh::Mesh(string modelname) {
+
+	vector<Vertex> vertices;
+	vector<Triangle> tris;
+
+	ifstream f(modelname);
+
+	while (!f.eof()) {
+		char c[128];
+		f.getline(c, 128);
+
+		strstream s;
+		s << c;
+		char junk;
+
+		if (c[0] == 'v') {
+			float x, y, z;
+			s >> junk >> x >> y >> z;
+			vertices.push_back(Vertex(x, y, z));
+		}
+
+		if (c[0] == 'f') {
+			int f[3];
+			s >> junk >> f[0] >> f[1] >> f[2];
+			tris.push_back(Triangle({ vertices[f[0] - 1],vertices[f[1] - 1] ,vertices[f[2] - 1] }));
+		}
+
+	}
+	faces = tris;
+}
+
 void Mesh::setPosition(float x, float y, float z) {
 	pos = sf::Vector3f(x, y, z);
 	for (int i = 0; i < faces.size(); i++) {

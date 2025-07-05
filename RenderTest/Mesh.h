@@ -4,6 +4,8 @@
 #include "Triangle.h"
 #include <SFML/Graphics.hpp>
 #include "Vertex.h"
+#include <fstream>
+#include <strstream>
 
 using namespace std;
 
@@ -15,6 +17,7 @@ public:
 	sf::Vector3f scale;
 	vector<Triangle> faces;
 	Mesh();
+	Mesh(string modelname);
 	void setPosition(float x, float y, float z);
 	void setRotation(float x, float y, float z);
 	void setScale(float x, float y, float z);
